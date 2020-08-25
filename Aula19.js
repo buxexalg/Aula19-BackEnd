@@ -1,40 +1,6 @@
 const helpers = require('./helpers');
-const { codigoBanco, transformaNumeroEmAgencia } = require('./helpers');
 
-const correntistas = [
-    {
-        nomeCorrentista: 'Joãozinho do Teste',
-        cpfCorrentista: '12345678912',
-        codigoBanco: '001',
-        agencia: '00123',
-        contaCorrente: '023145',
-        saldo: '0'
-    },
-    {
-        nomeCorrentista: 'Joãozinho do Teste',
-        cpfCorrentista: '123456789782',
-        codigoBanco: '001',
-        agencia: '00123',
-        contaCorrente: '023145',
-        saldo: '0'
-    },
-    {
-        nomeCorrentista: 'Joãozinho do Teste',
-        cpfCorrentista: '13245678912',
-        codigoBanco: '001',
-        agencia: '00123',
-        contaCorrente: '023145',
-        saldo: '0'
-    },
-    {
-        nomeCorrentista: 'Joãozinho do Teste',
-        cpfCorrentista: '12344578912',
-        codigoBanco: '001',
-        agencia: '00123',
-        contaCorrente: '023145',
-        saldo: '0'
-    },
-]
+const correntistas = [];
 
 const buscaCorrentista = (cpf) => {
     for (let i = 0; i < correntistas.length; i++) {
@@ -42,5 +8,24 @@ const buscaCorrentista = (cpf) => {
             return correntistas[i];
         }
     }
-    return 'Não existe CPF cadastrado.'
+    console.log('Não existe CPF cadastrado.')
+    return false;
 } 
+
+const adicionaCorrentista = (nomeCorrentista, cpfCorrentista, codigoBanco, agencia, contaCorrente, saldo = 0) => {
+    if (!buscaCorrentista(helpers.removeCaracteres(cpfCorrentista))) { 
+    const correntista = {
+        'nomeCorrentista' : nomeCorrentista, 
+        'cpfCorrentista' : helpers.removeCaracteres(cpfCorrentista), 
+        'codigoBanco' : helpers.removeCaracteres(codigoBanco), 
+        'agencia' : helpers.removeCaracteres(agencia), 
+        'contaCorrente' : helpers.removeCaracteres(contaCorrente), 
+        'saldo' : saldo
+    }
+    correntistas.push(correntista);
+    } else { console.log('O correntista já existe na lista.')}
+    return correntistas;
+}
+
+
+
