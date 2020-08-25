@@ -50,6 +50,17 @@ const codigoBanco = (numero) => {
         banco = bancosPorCodigo[numero].replace(' S.A.', '').replace(' (Brasil)','').replace(' (antigo)', '').replace(' Holding', '');
         return banco;
     }
-    
 }
+
+const removeCaracteres = (stringEntrada) => {
+    let stringFormatada = '';
+    for (let i = 0; i < stringEntrada.length; i++) {
+        if (!isNaN(stringEntrada[i])) {
+            stringFormatada += stringEntrada[i];
+        }
+    }
+    return stringFormatada;
+}
+
+console.log(removeCaracteres('12.31.3-2'));
 
