@@ -62,5 +62,8 @@ const removeCaracteres = (stringEntrada) => {
     return stringFormatada;
 }
 
-console.log(removeCaracteres('12.31.3-2'));
+const transformaNumeroEmCPF = (numero) => {
+    cpfFormatado = numero.slice(0,3) + '.' + numero.slice(3,6) + '.' + numero.slice(6,9) + '-' + numero.slice(9);
+    return cpfFormatado;
+}
 
