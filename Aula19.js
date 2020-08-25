@@ -63,7 +63,13 @@ const removeCaracteres = (stringEntrada) => {
 }
 
 const transformaNumeroEmCPF = (numero) => {
-    cpfFormatado = numero.slice(0,3) + '.' + numero.slice(3,6) + '.' + numero.slice(6,9) + '-' + numero.slice(9);
+    const cpfFormatado = numero.slice(0,3) + '.' + numero.slice(3,6) + '.' + numero.slice(6,9) + '-' + numero.slice(9);
     return cpfFormatado;
 }
+
+const transformaNumeroEmAgencia = (numero) => {
+    const numeroFormatado = numero.slice(0, -1) + '-' + numero.slice(-1);
+    return numeroFormatado;
+}
+
 
