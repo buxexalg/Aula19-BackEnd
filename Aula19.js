@@ -45,3 +45,8 @@ const atualizacaoCorrentista = (cpfCorrentista, propriedadeParaAtualizar, valorP
         correntistas[indiceAtualizacaoNum][propriedadeParaAtualizar] = helpers.removeCaracteres(valorPropriedade);
     }
 }
+
+const removeCorrentista = (cpfCorrentista) => {
+    const indiceRemocao = correntistas.indexOf(buscaCorrentista(helpers.removeCaracteres(cpfCorrentista)));
+    correntistas.splice(indiceRemocao, 1);
+}
