@@ -47,6 +47,14 @@ const atualizacaoCorrentista = (cpfCorrentista, propriedadeParaAtualizar, valorP
 }
 
 const removeCorrentista = (cpfCorrentista) => {
-    const indiceRemocao = correntistas.indexOf(buscaCorrentista(helpers.removeCaracteres(cpfCorrentista)));
+    const indiceRemocao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
     correntistas.splice(indiceRemocao, 1);
 }
+
+const depositoCorrentista = (cpfCorrentista, valorADepositar) => {
+    if (valorADepositar > 0) {
+        const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
+        correntistas[indiceAtualizacao]['saldo'] = String(parseInt(correntistas[indiceAtualizacao]['saldo'], 10) + valorADepositar);
+    }
+}
+
