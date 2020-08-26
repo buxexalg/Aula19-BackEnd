@@ -5,11 +5,10 @@ const correntistas = [];
 
 const buscaCorrentista = (cpf) => {
     for (let i = 0; i < correntistas.length; i++) {
-        if (correntistas[i]['cpfCorrentista'] === cpf) {
+        if (correntistas[i]['cpfCorrentista'] === helpers.removeCaracteres(cpf)) {
             return correntistas[i];
         }
     }
-    console.log('Não existe CPF cadastrado.')
     return false;
 } 
 
@@ -35,7 +34,14 @@ const erro = (err) => {
     }
 }
 
-adicionaCorrentista('Joãozinho123', '056.155.877-85', '033', '8514-7', '5527681-3', '153248');
-adicionaCorrentista('Joãozinho123', '056.155.567-85', '033', '8514-7', '5527681-3', '153248');
-adicionaCorrentista('Joãozinho123', '056.155.517-85', '033', '8514-7', '5527681-3', '153248');
-adicionaCorrentista('Joãozinho123', '056.155.537-85', '033', '8514-7', '5527681-3', '153248');
+const atualizacaoCorrentista = (cpfCorrentista, propriedadeParaAtualizar, valorPropriedade) => {
+    if (propriedadeParaAtualizar.toUpperCase() === 'saldo' || propriedadeParaAtualizar.toUpperCase() === "codigoBanco") {
+        console.log('Não é possível alterar essas propriedades.')
+    } else if (propriedadeParaAtualizar.toUpperCase() === 'nomeCorrentista'){
+        const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
+        correntistas[indiceAtualizacao][propriedadeParaAtualizar] = valorPropriedade;
+    } else {
+        const indiceAtualizacaoNum = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
+        correntistas[indiceAtualizacaoNum][propriedadeParaAtualizar] = helpers.removeCaracteres(valorPropriedade);
+    }
+}
