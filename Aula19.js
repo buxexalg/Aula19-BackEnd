@@ -58,3 +58,36 @@ const depositoCorrentista = (cpfCorrentista, valorADepositar) => {
     }
 }
 
+const retiraSaldo = (cpfCorrentista, codigoBanco, valorARetirar) => {
+    const remetente = buscaCorrentista(cpfRemetente);
+    if (valorADepositar > remetente.saldo) {
+        console.log("Saldo insuficiente!");
+    } else {
+        if (valorARetirar > 0) {
+            const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
+            correntistas[indiceAtualizacao]['saldo'] = String(parseInt(correntistas[indiceAtualizacao]['saldo'], 10) - valorARetirar);
+        }
+    }    
+}
+
+const transferenciaMesmoBanco = (cpfDestinatario, bancoDestinatario, cpfRemetente, bancoRemetente, valorADepositar) => {
+    const remetente = buscaCorrentista(cpfRemetente);
+        if (bancoDestinatario === bancoRemetente) {
+        if (valorADepositar > remetente.saldo) {
+            console.log("Saldo insuficiente!");
+        } else {
+            retiraSaldo(cpfDestinatario, valorADepositar);
+            depositoCorrentista(cpfRemetente, valorADepositar);
+        }
+    } else {
+        console.log('Os correntistas não são do mesmo banco.')
+    }
+}
+
+/* adicionaCorrentista('Meu Amigão', '00000000001', '001', '00011', '00000011', 500);
+
+adicionaCorrentista('Seu Amigão', '00000000002', '001', '00021', '00000021', 1000);
+
+transferenciaMesmoBanco('00000000001', '001','00000000002','002', 500);
+
+console.table(correntistas); */
