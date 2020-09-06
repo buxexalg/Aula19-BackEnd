@@ -1,7 +1,12 @@
 const helpers = require('./helpers');
 const fs = require("fs");
+const data = new Date();
+const dia = data.getDate();
+const mes = data.getMonth() + 1;
+const ano = data.getFullYear();
 
 const correntistas = [];
+const extrato = [];
 
 const buscaCorrentista = (cpf) => {
     for (let i = 0; i < correntistas.length; i++) {
@@ -34,6 +39,23 @@ const erro = (err) => {
     }
 }
 
+
+
+const criaExtratoBancario = (tipoDeOperacao, cpfCorrentista, codigoBanco, valor) => {
+    if (tipoDeOperacao.toUpperCase() === 'ENTRADA' || tipoDeOperacao.toUpperCase() === 'SAIDA') {
+        const extratoUnico = {
+            'data' : dia + '/' + mes + '/' + ano,
+            'tipoDeOperacao' : tipoDeOperacao.toUpperCase(), 
+            'cpfCorrentista' : cpfCorrentista, 
+            'codigoBanco' : codigoBanco, 
+            'valor' : valor
+        }
+
+        extrato.push(extratoUnico);
+        return extrato;
+    } else {console.log('Insira o tipo de operação como entrada ou saida.')}
+}
+
 const atualizacaoCorrentista = (cpfCorrentista, propriedadeParaAtualizar, valorPropriedade) => {
     if (propriedadeParaAtualizar.toUpperCase() === 'saldo' || propriedadeParaAtualizar.toUpperCase() === "codigoBanco") {
         console.log('Não é possível alterar essas propriedades.')
@@ -51,23 +73,25 @@ const removeCorrentista = (cpfCorrentista) => {
     correntistas.splice(indiceRemocao, 1);
 }
 
-const depositoCorrentista = (cpfCorrentista, valorADepositar) => {
+const depositoCorrentista = (cpfCorrentista, codigoBanco, valorADepositar) => {
     if (valorADepositar > 0) {
         const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
         correntistas[indiceAtualizacao]['saldo'] = String(parseInt(correntistas[indiceAtualizacao]['saldo'], 10) + valorADepositar);
     }
+    criaExtratoBancario('ENTRADA', cpfCorrentista, codigoBanco, valorADepositar);
 }
 
 const retiraSaldo = (cpfCorrentista, codigoBanco, valorARetirar) => {
-    const remetente = buscaCorrentista(cpfRemetente);
-    if (valorADepositar > remetente.saldo) {
+    const remetente = buscaCorrentista(cpfCorrentista);
+    if (valorARetirar > remetente.saldo) {
         console.log("Saldo insuficiente!");
     } else {
         if (valorARetirar > 0) {
             const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
             correntistas[indiceAtualizacao]['saldo'] = String(parseInt(correntistas[indiceAtualizacao]['saldo'], 10) - valorARetirar);
         }
-    }    
+    } 
+    criaExtratoBancario('SAIDA', cpfCorrentista, codigoBanco, valorARetirar);   
 }
 
 const transferenciaMesmoBanco = (cpfDestinatario, bancoDestinatario, cpfRemetente, bancoRemetente, valorADepositar) => {
@@ -76,18 +100,20 @@ const transferenciaMesmoBanco = (cpfDestinatario, bancoDestinatario, cpfRemetent
         if (valorADepositar > remetente.saldo) {
             console.log("Saldo insuficiente!");
         } else {
-            retiraSaldo(cpfDestinatario, valorADepositar);
-            depositoCorrentista(cpfRemetente, valorADepositar);
+            depositoCorrentista(cpfRemetente, bancoRemetente, valorADepositar);
+            retiraSaldo(cpfDestinatario, bancoDestinatario, valorADepositar);
         }
     } else {
         console.log('Os correntistas não são do mesmo banco.')
     }
 }
 
-/* adicionaCorrentista('Meu Amigão', '00000000001', '001', '00011', '00000011', 500);
+adicionaCorrentista('Meu Amigão', '00000000001', '001', '00011', '00000011', 500);
 
-adicionaCorrentista('Seu Amigão', '00000000002', '001', '00021', '00000021', 1000);
+adicionaCorrentista('Seu Amigão', '00000000002', '001', '00011', '00000021', 1000);
 
-transferenciaMesmoBanco('00000000001', '001','00000000002','002', 500);
+transferenciaMesmoBanco('00000000001', '001','00000000002','001', 500);
 
-console.table(correntistas); */
+console.table(correntistas);
+
+console.table(extrato);

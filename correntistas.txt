@@ -1,1 +1,1 @@
-[{"nomeCorrentista":"Meu Amigão","cpfCorrentista":"00000000001","codigoBanco":"001","agencia":"00011","contaCorrente":"00000011","saldo":500}]{"nomeCorrentista":"Seu Amigão","cpfCorrentista":"00000000002","codigoBanco":"001","agencia":"00021","contaCorrente":"00000021","saldo":1000}]
+[{"nomeCorrentista":"Meu Amigão","cpfCorrentista":"00000000001","codigoBanco":"001","agencia":"00011","contaCorrente":"00000011","saldo":500},{"nomeCorrentista":"Seu Amigão","cpfCorrentista":"00000000002","codigoBanco":"001","agencia":"00011","contaCorrente":"00000021","saldo":1000}]
