@@ -42,7 +42,7 @@ const erro = (err) => {
 
 
 const criaExtratoBancario = (tipoDeOperacao, cpfCorrentista, codigoBanco, valor) => {
-    if (tipoDeOperacao.toUpperCase() === 'ENTRADA' || tipoDeOperacao.toUpperCase() === 'SAIDA') {
+    if (tipoDeOperacao.toUpperCase() === 'ENTRADA' || tipoDeOperacao.toUpperCase() === 'SAIDA' || tipoDeOperacao.toUpperCase() === 'TRANSAÇÃO NÃO AUTORIZADA') {
         const extratoUnico = {
             'data' : dia + '/' + mes + '/' + ano,
             'tipoDeOperacao' : tipoDeOperacao.toUpperCase(), 
@@ -78,13 +78,14 @@ const depositoCorrentista = (cpfCorrentista, codigoBanco, valorADepositar) => {
         const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
         correntistas[indiceAtualizacao]['saldo'] = String(parseInt(correntistas[indiceAtualizacao]['saldo'], 10) + valorADepositar);
     }
-    criaExtratoBancario('ENTRADA', cpfCorrentista, codigoBanco, valorADepositar);
+    
 }
 
 const retiraSaldo = (cpfCorrentista, codigoBanco, valorARetirar) => {
     const remetente = buscaCorrentista(cpfCorrentista);
     if (valorARetirar > remetente.saldo) {
         console.log("Saldo insuficiente!");
+        criaExtratoBancario('TRANSAÇÃO NÃO AUTORIZADA', cpfCorrentista, codigoBanco, valorADepositar);
     } else {
         if (valorARetirar > 0) {
             const indiceAtualizacao = correntistas.indexOf(buscaCorrentista(cpfCorrentista));
@@ -99,6 +100,7 @@ const transferenciaMesmoBanco = (cpfDestinatario, bancoDestinatario, cpfRemetent
         if (bancoDestinatario === bancoRemetente) {
         if (valorADepositar > remetente.saldo) {
             console.log("Saldo insuficiente!");
+            criaExtratoBancario('TRANSAÇÃO NÃO AUTORIZADA', cpfDestinatario, bancoDestinatario, valorADepositar);
         } else {
             depositoCorrentista(cpfRemetente, bancoRemetente, valorADepositar);
             retiraSaldo(cpfDestinatario, bancoDestinatario, valorADepositar);
@@ -119,15 +121,24 @@ const buscaExtratoDoCorrentista = (cpfCorrentista, codigoBanco) => {
     return arrayCorrentista;
 }
 
+const gerarExtrato = (cpfCorrentista, codigoBanco) => {
+    const correntista = buscaCorrentista(cpfCorrentista);
+    const extratoCorrentista = buscaExtratoDoCorrentista(cpfCorrentista, codigoBanco);
 
-adicionaCorrentista('Meu Amigão', '00000000001', '001', '00011', '00000011', 500);
+    console.log(
+    `|| ${helpers.codigoBanco(codigoBanco)} ||` + '\n',
+    `Extrato bancário do ${correntista.nomeCorrentista}, CPF ${cpfCorrentista}` + '\n',
+    `Agência ${correntista.agencia} - Conta Corrente ${correntista.contaCorrente}` + '\n',
+    '---------------------------------------------' + '\n',
+    '|| Movimentações ||' + '\n',
+    '---------------------------------------------' + '\n',
+    'Tipo | Data da Ocorrência | Valor movimentado' + '\n',
+    '---------------------------------------------'
+    )
+    for(item of extratoCorrentista) {
+        console.log(
+            `${item.tipoDeOperacao} | ${item.data} | R$ ${item.valor},00`
+            )
+    }
 
-adicionaCorrentista('Seu Amigão', '00000000002', '001', '00011', '00000021', 1000);
-
-transferenciaMesmoBanco('00000000001', '001','00000000002','001', 500);
-
-console.table(correntistas);
-
-console.table(extrato);
-
-console.log(buscaExtratoDoCorrentista('00000000002', '001'));
+}
