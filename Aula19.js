@@ -108,6 +108,18 @@ const transferenciaMesmoBanco = (cpfDestinatario, bancoDestinatario, cpfRemetent
     }
 }
 
+const buscaExtratoDoCorrentista = (cpfCorrentista, codigoBanco) => {
+    const arrayCorrentista = [];
+    for (item of extrato) {
+        if (cpfCorrentista === item.cpfCorrentista && codigoBanco === item.codigoBanco) arrayCorrentista.push(item); 
+    }
+
+    if (arrayCorrentista.length === 0) console.log('Não existem registros para esse correntista.')
+
+    return arrayCorrentista;
+}
+
+
 adicionaCorrentista('Meu Amigão', '00000000001', '001', '00011', '00000011', 500);
 
 adicionaCorrentista('Seu Amigão', '00000000002', '001', '00011', '00000021', 1000);
@@ -117,3 +129,5 @@ transferenciaMesmoBanco('00000000001', '001','00000000002','001', 500);
 console.table(correntistas);
 
 console.table(extrato);
+
+console.log(buscaExtratoDoCorrentista('00000000002', '001'));
